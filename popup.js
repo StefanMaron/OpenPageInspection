@@ -25,7 +25,12 @@ function openThirdPartyExtensions() {
         if (params.company) {
             company = `&company=${params.company}`;
         }
-        let myNewUrl = `${urlObj.origin}${urlObj.pathname}?tenant=${params.tenant}&page=2500&filter=%27Published%20Application%27.Publisher%20IS%20%27%3c%3eMicrosoft%27`;
+        let tenant = `tenant=${params.tenant}`;
+        if (urlObj.origin = 'https://businesscentral.dynamics.com/') {
+            tenant = '';
+        }
+
+        let myNewUrl = `${urlObj.origin}${urlObj.pathname}?${tenant}${company}&page=2500&filter=%27Published%20Application%27.Publisher%20IS%20%27%3c%3eMicrosoft%27`;
         chrome.tabs.update(activeTab.id, { url: myNewUrl });
     })
 }
