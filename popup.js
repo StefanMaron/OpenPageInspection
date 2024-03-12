@@ -57,3 +57,30 @@ function openInVSCode() {
         window.open(`vscode://ms-dynamics-smb.al/navigateTo?type=page&id=${pageID}&environmentType=Sandbox&environmentName=${sandboxName}&tenant=${tenantID}`)
     })
 }
+
+document.getElementById("openTableData").addEventListener("click", openTableData);
+
+function openTableData() {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        var activeTab = tabs[0];
+        var urlObj = new URL(activeTab.url);
+
+        const params = new Proxy(new URLSearchParams(urlObj.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
+        let company = '';
+        if (params.company) {
+            company = `&company=${params.company}`;
+        }
+        let tenant = `tenant=${params.tenant}`;
+        if (urlObj.origin = 'https://businesscentral.dynamics.com/') {
+            tenant = '';
+        }
+
+        var tableID = prompt("Please enter the table ID you want to open");
+        if (tableID != null) {
+            let myNewUrl = `${urlObj.origin}${urlObj.pathname}?${tenant}${company}&Table=${tableID}`;
+            window.open(myNewUrl)
+        }
+    })
+}
